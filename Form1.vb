@@ -30,7 +30,11 @@ Public Class Form1
             Exit Sub
         End If
         result.Text = result.Text & "[" & TimeString & "] " & "开始执行"
-        mkvideo()
+        If mode.SelectedItem = "视频" Then
+            mkvideo()
+        Else
+            mkimg()
+        End If
     End Sub
 
     Private Sub GroupBox1_Enter(sender As Object, e As EventArgs) Handles GroupBox1.Enter
