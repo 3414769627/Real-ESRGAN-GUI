@@ -7,16 +7,11 @@ Module Module1
     Public file_name As String
     Public Function readDir()
         Try
-            Dim num As Integer
-            Dim filename() As String
-            Dim result() As String
-            ' Only get files that begin with the letter "c."
             Dim dirs As String() = Directory.GetFiles(Application.StartupPath.ToString & "\main\models\", "*.param") '列出C:\下c开头的文件，你需要稍微修改，你的路径，列出所有文件是*.*
             Console.WriteLine("The number of files starting with c is {0}.", dirs.Length)
             Dim dir As String
             For Each dir In dirs
-                'path(num) = dir
-                'Form1.modules.Items.Add(dir)
+                '添加模型选项
                 Form1.modules.Items.Add(Path.GetFileNameWithoutExtension(dir))
 
             Next
@@ -27,6 +22,7 @@ Module Module1
     End Function
     Public Sub mkimg()
         Try
+            '没什么好说的就是利用Process执行程序并获取结果（到最后貌似没有结果）
             Dim cmd As New Process
             cmd.StartInfo.FileName = Application.StartupPath & "\main\main.exe"
             cmd.StartInfo.UseShellExecute = False
@@ -37,7 +33,7 @@ Module Module1
             cmd.StartInfo.Arguments = " -i " & filepath & " -o output\" & file_name & "_ok." & Form1.format.SelectedItem.ToString & " -f " & Form1.format.SelectedItem.ToString & " -n " & Form1.modules.SelectedItem.ToString
             cmd.Start()
             Form1.result.Text = Form1.result.Text & vbCrLf & "[" & TimeString & "] " & "进程ID：" & cmd.Id & "已退出"
-            If Not My.Computer.FileSystem.FileExists(Application.StartupPath & "\output\" & file_name & "_ok." & Form1.format.SelectedItem.ToString) Then
+            If Not My.Computer.FileSystem.FileExists(Application.StartupPath & "output\" & file_name & "_ok." & Form1.format.SelectedItem.ToString) Then
                 Form1.result.Text = Form1.result.Text & vbCrLf & "[" & TimeString & "] " & "程序执行失败，请检查此计算机是否支持DirectX 11.1或以上版本和Vulkan Runtime"
             End If
             cmd.StandardInput.Close()
@@ -110,6 +106,7 @@ Module Module1
     End Sub
 
     Public Sub delTmpFile()
+        '删除临时文件
         Try
             Form1.result.Text = Form1.result.Text & vbCrLf & "正在清理临时文件..."
             Shell("del /q " & Application.StartupPath & "main/out_frames/*")
